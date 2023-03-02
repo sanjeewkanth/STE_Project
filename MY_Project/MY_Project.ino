@@ -1,9 +1,7 @@
 #include <ArduinoMqttClient.h>
 #include <WiFiClient.h>
 #include <WiFi.h>
-//#include "arduino_secrets.h"
 
-///////please enter your sensitive data in the Secret tab/arduino_secrets.h
 const char* ssid = "Dialog 4G 404";        // your network SSID (name)
 const char* pass = "b1f50Ce1";    // your network password (use for WPA, or use as key for WEP)
 
@@ -50,7 +48,7 @@ void setup_wifi() {
 
 void setup() {
   //Initialize serial and wait for port to open:
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // attempt to connect to Wifi network:
   setup_wifi();
@@ -73,8 +71,6 @@ void setup() {
 }
 
 void loop() {
-  // call poll() regularly to allow the library to send MQTT keep alive which
-  // avoids being disconnected by the broker
   mqttClient.poll();
 
   unsigned long currentMillis = millis();
@@ -84,35 +80,14 @@ void loop() {
     // save the last time a message was sent
     previousMillis = currentMillis;
 
-    //record random value from A0, A1 and A2
-//    int Rvalue = analogRead(A0);
-//    int Rvalue2 = analogRead(A1);
-//    int Rvalue3 = analogRead(A2);
 
     Serial.print("Sending message to topic: ");
     Serial.println(topic);
-//    Serial.println(Rvalue);
-
-//    Serial.print("Sending message to topic: ");
-//    Serial.println(topic2);
-//    Serial.println(Rvalue2);
-//
-//    Serial.print("Sending message to topic: ");
-//    Serial.println(topic2);
-//    Serial.println(Rvalue3);
 
     // send message, the Print interface can be used to set the message contents
     mqttClient.beginMessage(topic);
     mqttClient.print(payload);
     mqttClient.endMessage();
-
-//    mqttClient.beginMessage(topic2);
-//    mqttClient.print(Rvalue2);
-//    mqttClient.endMessage();
-//
-//    mqttClient.beginMessage(topic3);
-//    mqttClient.print(Rvalue3);
-//    mqttClient.endMessage();
 
     Serial.println();
   }
